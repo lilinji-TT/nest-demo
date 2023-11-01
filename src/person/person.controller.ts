@@ -1,11 +1,49 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { PersonService } from './person.service';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+  Query,
+  UploadedFiles,
+  UseInterceptors,
+} from '@nestjs/common';
+import { AnyFilesInterceptor } from '@nestjs/platform-express';
 import { CreatePersonDto } from './dto/create-person.dto';
 import { UpdatePersonDto } from './dto/update-person.dto';
+import { PersonService } from './person.service';
 
-@Controller('person')
+@Controller('api/person')
 export class PersonController {
   constructor(private readonly personService: PersonService) {}
+  @Post('file')
+  @UseInterceptors(
+    AnyFilesInterceptor({
+      dest: 'uploads/',
+    }),
+  )
+  body2(
+    @Body() createPersonDto: CreatePersonDto,
+    @UploadedFiles() files: Array<Express.Multer.File>,
+  ) {
+    console.log(files);
+    return `received: ${JSON.stringify(createPersonDto)}`;
+  }
+  @Post()
+  body(@Body() createPersonDto: CreatePersonDto) {
+    return `received: ${JSON.stringify(createPersonDto)}`;
+  }
+  @Get('find')
+  queryParam(@Query('name') name: string, @Query('age') age: number) {
+    return `received: name ${name},age = ${age}`;
+  }
+
+  @Get(':id')
+  urlParam(@Param('id') id: string) {
+    return `received: id ${id}`;
+  }
 
   @Post()
   create(@Body() createPersonDto: CreatePersonDto) {
