@@ -14,8 +14,10 @@ import { AnyFilesInterceptor } from '@nestjs/platform-express';
 import { CreatePersonDto } from './dto/create-person.dto';
 import { UpdatePersonDto } from './dto/update-person.dto';
 import { PersonService } from './person.service';
+import { AppInterceptor } from 'src/app.interceptor';
 
 @Controller('api/person')
+@UseInterceptors(AppInterceptor)
 export class PersonController {
   constructor(private readonly personService: PersonService) {}
   @Post('file')
