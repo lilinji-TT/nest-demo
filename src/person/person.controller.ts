@@ -33,10 +33,18 @@ export class PersonController {
     console.log(files);
     return `received: ${JSON.stringify(createPersonDto)}`;
   }
+
+  @Post('file/base64')
+  file1(@Body() file: string) {
+    console.log(file);
+    return file;
+  }
+
   @Post()
   body(@Body() createPersonDto: CreatePersonDto) {
     return `received: ${JSON.stringify(createPersonDto)}`;
   }
+
   @Get('find')
   queryParam(@Query('name') name: string, @Query('age') age: number) {
     return `received: name ${name},age = ${age}`;
