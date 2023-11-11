@@ -17,11 +17,6 @@ async function bootstrap() {
     }),
   );
   app.enableCors();
-  // 增加 JSON 请求体的大小限制为50mb
-  app.use(json({ limit: '50mb' }));
-
-  // 增加 URL-encoded 请求体的大小限制为50mb
-  app.use(urlencoded({ limit: '50mb', extended: true }));
   await app.listen(3000);
 }
 bootstrap();

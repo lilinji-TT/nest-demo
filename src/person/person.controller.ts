@@ -1,38 +1,23 @@
 import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  Param,
-  Patch,
-  Post,
-  Query,
-  UploadedFiles,
-  UseInterceptors,
+    Body,
+    Controller,
+    Delete,
+    Get,
+    Param,
+    Patch,
+    Post,
+    Query,
+    UseInterceptors
 } from '@nestjs/common';
-import { AnyFilesInterceptor } from '@nestjs/platform-express';
+import { AppInterceptor } from 'src/app.interceptor';
 import { CreatePersonDto } from './dto/create-person.dto';
 import { UpdatePersonDto } from './dto/update-person.dto';
 import { PersonService } from './person.service';
-import { AppInterceptor } from 'src/app.interceptor';
 
 @Controller('api/person')
 @UseInterceptors(AppInterceptor)
 export class PersonController {
   constructor(private readonly personService: PersonService) {}
-  @Post('file')
-  @UseInterceptors(
-    AnyFilesInterceptor({
-      dest: 'uploads/',
-    }),
-  )
-  body2(
-    @Body() createPersonDto: CreatePersonDto,
-    @UploadedFiles() files: Array<Express.Multer.File>,
-  ) {
-    console.log(files);
-    return `received: ${JSON.stringify(createPersonDto)}`;
-  }
 
   @Post('file/base64')
   file1(@Body() file: string) {
