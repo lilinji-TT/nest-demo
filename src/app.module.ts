@@ -9,9 +9,6 @@ import { PersonModule } from './person/person.module';
     PersonModule,
     JwtModule.register({
       secret: 'li',
-      signOptions: {
-        expiresIn: '7d',
-      },
     }),
   ],
   controllers: [AppController],

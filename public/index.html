@@ -4,11 +4,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>扫码登录确认</title>
+    <script src="https://unpkg.com/axios@1.5.0/dist/axios.min.js"></script>
 </head>
 
 <body>
-    <h1>Hello World !</h1>
+    <img id="img" src="" alt="" />
+    <div id="info"></div>
+    <script>
+        axios.get('http://localhost:3000/qrcode/generate').then(res => {
+            document.getElementById('img').src = res.data.img;
+
+            queryStatus(res.data.qrcode_id);
+        });
+
+        function queryStatus(qrcode_id) {
+            axios.get('http://localhost:3000/qrcode/check?id=' + qrcode_id).then(res => {
+                const status = res.data.status;
+
+                let content = '';
+                switch (status) {
+                    case 'noscan': content = '二维码未扫描'; break;
+                    case 'scan-wait-confirm': content = '扫描中'; break;
+                    case 'scan-confirm': content = '扫码成功, 当前登陆用户：' + res.data.userInfo.username; break;
+                    case 'scan-cancel': content = '已取消扫码'; break;
+                    case 'expired': content = '二维码已过期'; break;
+                }
+
+                document.getElementById('info').textContent = content;
+
+                if (status === 'noscan' || status === 'scan-wait-confirm') {
+                    setTimeout(() => {
+                        queryStatus(qrcode_id);
+                    }, 1000);
+                }
+            });
+        }
+    </script>
 </body>
 
 </html>

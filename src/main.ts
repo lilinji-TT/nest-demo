@@ -4,9 +4,7 @@ import * as session from 'express-session';
 import { AppModule } from './app.module';
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
-  app.useStaticAssets('public', {
-    prefix: '/static',
-  });
+  app.useStaticAssets('public', { prefix: '/pages' });
   // session
   app.use(
     session({
