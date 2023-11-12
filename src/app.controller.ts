@@ -79,10 +79,12 @@ export class AppController {
       return 1;
     }
   }
+
   @Get('qrcode/check')
   async check(@Query('id') id: string) {
     return map.get(`qrcode_${id}`);
   }
+
   @Get('qrcode/scan')
   async scan(@Query('id') id: string) {
     const info = map.get(`qrcode_${id}`);
@@ -111,7 +113,7 @@ export class AppController {
       throw new UnauthorizedException('token 过期，请重新登录');
     }
     const info = map.get(`qrcode_${id}`);
-    console.log(info);
+
     if (!info) {
       throw new BadRequestException('二维码已过期');
     }
